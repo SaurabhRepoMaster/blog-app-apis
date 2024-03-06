@@ -3,8 +3,13 @@ package com.blog.exceptions;
 import com.blog.payloads.ApiResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.FieldError;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+
+import java.util.HashMap;
+import java.util.Hashtable;
 
 //this annotation will make this class kind of global exception handler i.e. if any exception comes up in any controller
 //then controller will come to this class.
@@ -40,5 +45,19 @@ public class GlobalExceptionHandler {
         String message = ex.getMessage();
         ApiResponse response = new ApiResponse(message,false);
         return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+    }
+
+    //MethodArgumentNotValidException is being thrown if user is putting incorrect type of email id .
+    //this exception is being thrown thorugh spring boot starter validator.
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public ResponseEntity<HashMap<String,String>> methodArgumentNotValidException(MethodArgumentNotValidException ex)
+    {
+        HashMap<String,String> result = new HashMap<>();
+        ex.getBindingResult().getAllErrors().forEach((error)->{
+            String fieldName = ((FieldError)error).getField();
+            String message = error.getDefaultMessage();
+            result.put(fieldName,message);
+        });
+        return new ResponseEntity<>(result,HttpStatus.BAD_REQUEST);
     }
 }
