@@ -5,6 +5,7 @@ import com.blog.exceptions.ResourceNotFoundException;
 import com.blog.payloads.UserDto;
 import com.blog.repositories.UserRepo;
 import com.blog.services.UserService;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -20,6 +21,9 @@ public class UserServiceImpl implements UserService {
     //ClassName is : jdk.proxy2.$Proxy109  packageName is : jdk.proxy2
     @Autowired
     private UserRepo userRepo;
+
+    @Autowired
+    private ModelMapper modelMapper;
 
     @Override
     public UserDto createUser(UserDto userDto) {
@@ -60,25 +64,38 @@ public class UserServiceImpl implements UserService {
         this.userRepo.deleteById(userId);
     }
 
-    private User dtoToUser(UserDto userDto)
-    {
-        User user = new User();
-        user.setId(userDto.getId());
-        user.setName(userDto.getName());
-        user.setEmail(userDto.getEmail());
-        user.setPassword(userDto.getPassword());
-        user.setAbout(userDto.getAbout());
+    //We can use like below 2 methods to get Dto from User or User from Dto. But better approach is to use modelmapper. I
+    //have used modelmapper below these commented methods.
+    //    private User dtoToUser(UserDto userDto)
+    //    {
+    //        User user = new User();
+    //        user.setId(userDto.getId());
+    //        user.setName(userDto.getName());
+    //        user.setEmail(userDto.getEmail());
+    //        user.setPassword(userDto.getPassword());
+    //        user.setAbout(userDto.getAbout());
+    //        return user;
+    //    }
+    //
+    //    private UserDto usertoDto(User user)
+    //    {
+    //        UserDto userDto = new UserDto();
+    //        userDto.setId(user.getId());
+    //        userDto.setName(user.getName());
+    //        userDto.setEmail(user.getEmail());
+    //        userDto.setPassword(user.getPassword());
+    //        userDto.setAbout(user.getAbout());
+    //        return userDto;
+    //    }
+
+    private User dtoToUser(UserDto userDto){
+        User user = this.modelMapper.map(userDto,User.class);
         return user;
     }
 
-    private UserDto usertoDto(User user)
-    {
-        UserDto userDto = new UserDto();
-        userDto.setId(user.getId());
-        userDto.setName(user.getName());
-        userDto.setEmail(user.getEmail());
-        userDto.setPassword(user.getPassword());
-        userDto.setAbout(user.getAbout());
+    private UserDto usertoDto(User user){
+        UserDto userDto = this.modelMapper.map(user,UserDto.class);
         return userDto;
     }
+
 }
