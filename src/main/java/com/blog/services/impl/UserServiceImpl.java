@@ -1,6 +1,7 @@
 package com.blog.services.impl;
 
 import com.blog.entities.User;
+import com.blog.exceptions.ExistingRecordException;
 import com.blog.exceptions.ResourceNotFoundException;
 import com.blog.payloads.UserDto;
 import com.blog.repositories.UserRepo;
@@ -28,20 +29,25 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserDto createUser(UserDto userDto) {
         User user = this.dtoToUser(userDto);
-        User savedUser  = userRepo.save(user);
-        return this.usertoDto(savedUser);
+        try {
+            User savedUser = userRepo.save(user);
+            return this.usertoDto(savedUser);
+        }catch(Exception e)
+        {
+            throw new ExistingRecordException(userDto.getEmail());
+        }
     }
 
     @Override
     public UserDto updateUser(UserDto userDto, Integer userId) {
         User user = this.userRepo.findById(userId)
                 .orElseThrow(()-> new ResourceNotFoundException("User"," Id ",userId));
-
+        User updatedUser = null;
         user.setName(userDto.getName());
         user.setEmail(userDto.getEmail());
         user.setPassword(userDto.getPassword());
         user.setAbout(userDto.getAbout());
-        User updatedUser = this.userRepo.save(user);
+        updatedUser = this.userRepo.save(user);
         return this.usertoDto(updatedUser);
     }
 

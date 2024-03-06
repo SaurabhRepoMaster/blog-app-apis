@@ -33,4 +33,12 @@ public class GlobalExceptionHandler {
         ApiResponse response = new ApiResponse(message,false);
         return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
     }
+
+    @ExceptionHandler(ExistingRecordException.class)
+    public ResponseEntity<ApiResponse> resourceNotFoundExceptionHandler(ExistingRecordException ex)
+    {
+        String message = ex.getMessage();
+        ApiResponse response = new ApiResponse(message,false);
+        return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+    }
 }
