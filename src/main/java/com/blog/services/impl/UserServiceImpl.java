@@ -6,7 +6,6 @@ import com.blog.payloads.UserDto;
 import com.blog.repositories.UserRepo;
 import com.blog.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.context.config.ConfigDataResourceNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -15,6 +14,10 @@ import java.util.stream.Collectors;
 @Service
 public class UserServiceImpl implements UserService {
 
+    //Note: We are able to make object of UserRepo even tho UserRepo is interface because whenever springboot
+    //application is being started..all repo classes are scanned and its Implementation classes are created at runtime
+    //We can see repoTest() test in BlogAppApisApplicationTests where we are printing className and packageName.
+    //ClassName is : jdk.proxy2.$Proxy109  packageName is : jdk.proxy2
     @Autowired
     private UserRepo userRepo;
 
@@ -53,7 +56,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void deleteUser(Integer userId) {
-        User user = this.userRepo.findById(userId).orElseThrow(()-> new ResourceNotFoundException("User"," Id ", userId));
+        User user = this.userRepo.findById(userId).orElseThrow(()-> new ResourceNotFoundException("User","Id", userId));
         this.userRepo.deleteById(userId);
     }
 

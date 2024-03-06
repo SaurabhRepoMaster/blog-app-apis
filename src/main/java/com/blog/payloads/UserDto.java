@@ -7,8 +7,9 @@ import lombok.Setter;
 @NoArgsConstructor
 @Getter
 @Setter
-//This DTO will be used for exposig attributes. i.e. we are not going to expose User entity now and will use User entity
+//This DTO will be used for exposing attributes. i.e. we are not going to expose User entity now and will use User entity
 //for DB only.
+//Data Transfer Object
 public class UserDto {
 
     private int id;
