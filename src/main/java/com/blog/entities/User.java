@@ -5,6 +5,9 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Entity
 @Table(name="users")
 //below properties are from lombok
@@ -24,5 +27,11 @@ public class User {
     private String email;
     private String password;
     private String about;
+
+    //it means 1 user can have many posts.
+    //lazy means parent will be loaded and child will not be loaded
+    //mappedBy="user", this user we will find in Post Class.
+    @OneToMany(mappedBy = "user",cascade = CascadeType.ALL,fetch = FetchType.LAZY)
+    private List<Post> posts = new ArrayList<>();
 
 }
