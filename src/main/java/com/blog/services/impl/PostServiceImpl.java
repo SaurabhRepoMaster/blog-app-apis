@@ -5,12 +5,18 @@ import com.blog.entities.Post;
 import com.blog.entities.User;
 import com.blog.exceptions.ResourceNotFoundException;
 import com.blog.payloads.PostDto;
+import com.blog.payloads.PostResponse;
+import com.blog.payloads.UserDto;
 import com.blog.repositories.CategoryRepo;
 import com.blog.repositories.PostRepo;
 import com.blog.repositories.UserRepo;
 import com.blog.services.PostService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
@@ -63,10 +69,43 @@ public class PostServiceImpl implements PostService {
         return postToPostDto(post);
     }
 
+//    @Override
+//    public List<PostDto> getAllPosts(Integer pageNumber, Integer pageSize) {
+//        //commenting this code as this will not find out pagination or anything
+//        //List<Post> postList = postRepo.findAll();
+//        //Implementing pagination:
+//        Pageable page = PageRequest.of(pageNumber,pageSize);
+//        Page<Post> pagePost= postRepo.findAll(page);
+//        List<Post> postList = pagePost.getContent();
+//
+//        List<PostDto>  list = postList.stream().map(post -> postToPostDto(post)).collect(Collectors.toList());
+//        return list;
+//    }
     @Override
-    public List<PostDto> getAllPosts() {
-        List<PostDto> list = postRepo.findAll().stream().map(post -> postToPostDto(post)).collect(Collectors.toList());
-        return list;
+    public PostResponse getAllPosts(Integer pageNumber, Integer pageSize,String sortBy, String sortDir) {
+        //commenting this code as this will not find out pagination or anything
+        //List<Post> postList = postRepo.findAll();
+        //Implementing pagination:
+        Sort sort = null;
+        if("ASC".equals(sortDir))
+            sort = Sort.by(sortBy).ascending();
+        else
+            sort = Sort.by(sortBy).descending();
+        //if sorting not required, we can use below commented to get object
+        //Pageable page = PageRequest.of(pageNumber,pageSize);
+        Pageable page = PageRequest.of(pageNumber,pageSize,sort);
+        Page<Post> pagePost= postRepo.findAll(page);
+        List<Post> postList = pagePost.getContent();
+
+        List<PostDto>  list = postList.stream().map(post -> postToPostDto(post)).collect(Collectors.toList());
+        PostResponse postResponse = new PostResponse();
+        postResponse.setContent(list);
+        postResponse.setPageNumber(pagePost.getNumber());
+        postResponse.setPageSize(pagePost.getSize());
+        postResponse.setTotalPages(pagePost.getTotalPages());
+        postResponse.setTotalElements(pagePost.getTotalElements());
+        postResponse.setLastPage(pagePost.isLast());
+        return postResponse;
     }
 
     @Override
@@ -91,7 +130,9 @@ public class PostServiceImpl implements PostService {
 
     @Override
     public List<PostDto> searchPosts(String keyword) {
-        return null;
+        List<PostDto> list= this.postRepo.searchByTitleContaining("%"+keyword+"%").stream()
+                                .map((post -> postToPostDto(post))).collect(Collectors.toList());
+        return list;
     }
 
     private Post postDtoToPost(PostDto postDto)

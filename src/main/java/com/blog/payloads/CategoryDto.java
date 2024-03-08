@@ -20,4 +20,5 @@ public class CategoryDto {
     @NotBlank
     @Size(min = 8,message = "Minimum size of Category Description is 8!!")
     private String categoryDescription;
+
 }
