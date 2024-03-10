@@ -36,5 +36,5 @@ public class PostDto {
     //private User user;
     private UserDto user;
 
-    private Set<CommentDto> comment = new HashSet<>();
+    private Set<CommentDto> comments = new HashSet<>();
 }
