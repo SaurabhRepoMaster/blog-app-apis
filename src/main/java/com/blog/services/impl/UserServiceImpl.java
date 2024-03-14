@@ -8,6 +8,7 @@ import com.blog.repositories.UserRepo;
 import com.blog.services.UserService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -22,6 +23,9 @@ public class UserServiceImpl implements UserService {
     //ClassName is : jdk.proxy2.$Proxy109  packageName is : jdk.proxy2
     @Autowired
     private UserRepo userRepo;
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     @Autowired
     private ModelMapper modelMapper;
@@ -68,6 +72,12 @@ public class UserServiceImpl implements UserService {
     public void deleteUser(Integer userId) {
         User user = this.userRepo.findById(userId).orElseThrow(()-> new ResourceNotFoundException("User","Id", userId));
         this.userRepo.deleteById(userId);
+    }
+
+    @Override
+    public User createUserWithJwt(User user) {
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
+        return userRepo.save(user);
     }
 
     //We can use like below 2 methods to get Dto from User or User from Dto. But better approach is to use modelmapper. I
