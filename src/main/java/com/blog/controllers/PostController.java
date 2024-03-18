@@ -6,6 +6,8 @@ import com.blog.payloads.PostDto;
 import com.blog.payloads.PostResponse;
 import com.blog.services.FileService;
 import com.blog.services.PostService;
+import io.swagger.v3.oas.annotations.Hidden;
+import io.swagger.v3.oas.annotations.Operation;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -56,6 +58,22 @@ public class PostController {
 
     }
 
+    //it is swagger ui annotation that will place this API out of controller in Swagger UI and put a  name to this API that
+    //we have mentioned here.
+    @Operation(
+            tags="Get a POST",
+            summary = "Get POST Detail",
+            responses = {
+                    @io.swagger.v3.oas.annotations.responses.ApiResponse(
+                            description = "Success",
+                            responseCode = "200"
+                    ),
+                    @io.swagger.v3.oas.annotations.responses.ApiResponse(
+                            description = "Failure",
+                            responseCode = "404"
+                    )
+            }
+    )
     @GetMapping("/posts/{postId}")
     public ResponseEntity<PostDto> getPost(@PathVariable Integer postId) {
         PostDto post = postService.getPostById(postId);
@@ -85,6 +103,7 @@ public class PostController {
 
     }
 
+    @Hidden  //this will hide this api from swagger
     @DeleteMapping("/posts/{postId}")
     public ResponseEntity<?> deletePost(@PathVariable Integer postId) {
         this.postService.deletePost(postId);
