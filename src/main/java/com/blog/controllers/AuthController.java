@@ -3,6 +3,7 @@ package com.blog.controllers;
 import com.blog.config.JwtHelper;
 import com.blog.entities.JwtResponse;
 import com.blog.entities.User;
+import com.blog.payloads.UserDto;
 import com.blog.services.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -68,7 +69,7 @@ public class AuthController {
     }
 
     @PostMapping("/create-user")
-    public User createUser(@RequestBody User user)
+    public UserDto createUser(@RequestBody User user)
     {
         return userService.createUserWithJwt(user);
     }

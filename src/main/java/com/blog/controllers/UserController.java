@@ -7,6 +7,8 @@ import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
@@ -38,6 +40,13 @@ public class UserController {
     }
 
     @DeleteMapping("/{userId}")
+    @PreAuthorize("hasRole('ADMIN')") //it will make this API only accessible to user with ADMIN role
+    //to test role based access..
+    //insert in users_role table of user id and role id of ROLE_USER and ROLE_ADMIN .i.e. 1 2 and 2 1
+    // in role tables ..insert 1 ROLE_ADMIN
+    //insert 2 ROLE_USER
+
+    //then user 2 will be able to access this api since it has JWT token of admin access.
     //if we don't know return type, we can use ?
     public ResponseEntity<?> deleteUser(@PathVariable Integer userId)
     {

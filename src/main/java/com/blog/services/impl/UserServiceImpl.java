@@ -1,9 +1,12 @@
 package com.blog.services.impl;
 
+import com.blog.config.AppConstants;
+import com.blog.entities.Role;
 import com.blog.entities.User;
 import com.blog.exceptions.ExistingRecordException;
 import com.blog.exceptions.ResourceNotFoundException;
 import com.blog.payloads.UserDto;
+import com.blog.repositories.RoleRepo;
 import com.blog.repositories.UserRepo;
 import com.blog.services.UserService;
 import org.modelmapper.ModelMapper;
@@ -29,6 +32,9 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     private ModelMapper modelMapper;
+
+    @Autowired
+    private RoleRepo roleRepo;
 
     @Override
     public UserDto createUser(UserDto userDto) {
@@ -75,9 +81,12 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User createUserWithJwt(User user) {
+    public UserDto createUserWithJwt(User user) {
         user.setPassword(passwordEncoder.encode(user.getPassword()));
-        return userRepo.save(user);
+        Role role = this.roleRepo.findById(AppConstants.NORMAL_USER).get();
+
+        user.getRoles().add(role);
+        return this.usertoDto(userRepo.save(user));
     }
 
     //We can use like below 2 methods to get Dto from User or User from Dto. But better approach is to use modelmapper. I

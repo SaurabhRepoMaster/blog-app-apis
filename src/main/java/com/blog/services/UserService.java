@@ -17,5 +17,5 @@ public interface UserService {
 
     void deleteUser(Integer userId);
 
-    User createUserWithJwt(User user);
+    UserDto createUserWithJwt(User user);
 }

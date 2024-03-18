@@ -1,13 +1,22 @@
 package com.blog;
 
+import com.blog.config.AppConstants;
+import com.blog.entities.Role;
+import com.blog.repositories.RoleRepo;
 import org.modelmapper.ModelMapper;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 
-@SpringBootApplication
-public class BlogAppApisApplication {
+import java.util.List;
 
+@SpringBootApplication
+public class BlogAppApisApplication implements CommandLineRunner {
+
+	@Autowired
+	private RoleRepo roleRepo;
 	public static void main(String[] args) {
 		SpringApplication.run(BlogAppApisApplication.class, args);
 	}
@@ -20,4 +29,23 @@ public class BlogAppApisApplication {
 		return new ModelMapper();
 	}
 
+	//this run method comes after implementing CommandLineRunner
+	//this run method will help us in inserting roles in role table since role will be limited only.
+	@Override
+	public void run(String... args) throws Exception {
+		try{
+			Role role = new Role();
+			role.setId(AppConstants.ADMIN_USER);
+			role.setName("ROLE_ADMIN");
+
+			Role role1 = new Role();
+			role1.setId(AppConstants.NORMAL_USER);
+			role1.setName("ROLE_USER");
+
+			roleRepo.saveAll(List.of(role,role1));
+		}catch (Exception e)
+		{
+			e.printStackTrace();
+		}
+	}
 }
