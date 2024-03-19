@@ -41,7 +41,7 @@ public class SecurityConfig {
 
     public static final String[] PUBLIC_URLS ={
             "/auth/login","/auth/create-user","/v3/api-docs","/v2/api-docs",
-            "/swagger-resources/**","/swagger-ui/**","/webjars/**"
+            "/swagger-resources/**","/swagger-ui/**","/webjars/**","/async/**"
     };
     @Autowired
     private PasswordEncoder passwordEncoder;

@@ -9,10 +9,18 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
+import org.springframework.scheduling.annotation.EnableAsync;
 
 import java.util.List;
 
 @SpringBootApplication
+@EnableAsync //it will enable async on API level.
+//To enable async support in our Spring Boot application,
+//we need to add the @EnableAsync annotation to our BlogAppApisApplication class.
+//This annotation will tell Spring to enable async support and create a pool of threads to handle async requests.
+// After adding the @EnableAsync annotation, Spring will create a pool of threads to handle async requests.
+//By default, Spring will create a pool of size 8 threads.
+//This pool can be configured using the spring.task.execution.pool.core-size property.
 public class BlogAppApisApplication implements CommandLineRunner {
 
 	@Autowired
