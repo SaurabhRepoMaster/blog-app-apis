@@ -97,7 +97,19 @@
 			<version>2.4.0</version>
 		</dependency>
 
-
+		<!-- this will add webFLux dependency and it will by default enable SPRING ASYNC REACTIVE MODEL-->
+		<!--Adding both spring-boot-starter-web and spring-boot-starter-webflux modules in your application results in Spring Boot
+		 auto-configuring Spring MVC, not WebFlux. This behavior has been chosen because many Spring developers add spring-boot-starter-webflux
+		 to their Spring MVC application to use the reactive WebClient .-->
+		<!--The difference is that Spring Web MVC (spring-boot-starter-web) uses a synchronous programming model
+			and Spring WebFlux (spring-boot-starter-webflux) uses an asynchronous (reactive) model.
+			The synchronous model uses a Java thread for each request and all method calls run synchronously in this thread
+			returning the objects directly. The asynchronous model uses reactive programming and each method call in a single
+			request may be handled in different threads. The methods you write have to be non-blocking and return instances Mono or Flux.-->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-webflux</artifactId>
+		</dependency>
 
 
 	</dependencies>
