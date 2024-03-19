@@ -11,6 +11,7 @@ import com.blog.repositories.CategoryRepo;
 import com.blog.repositories.PostRepo;
 import com.blog.repositories.UserRepo;
 import com.blog.services.PostService;
+import jakarta.transaction.Transactional;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -52,6 +53,28 @@ public class PostServiceImpl implements PostService {
         Post createdPost = postRepo.save(post);
         return postToPostDto(createdPost);
     }
+
+    @Transactional //it will help us to maintain data consistency between tables..
+    //since this method will return NPE knowingly..and we have put  @Transactional on this method, so it will not even
+    //commit category record in db..and in case if @Transactional is commented on this method, then category record will be
+    //inserted in category table even if below code fails.
+    //NOTE: when  @Transactional  is used...then all data will be commited to tables at same time..so if in case this method
+    //fails, it will not commit any record.
+    //Read from here: https://www.geeksforgeeks.org/spring-boot-transaction-management-using-transactional-annotation/
+    public PostDto createPostWithTransaction(PostDto postDto,Integer userId,Integer categoryId) {
+        Category category = new Category();
+        category.setCategoryTitle("hello");
+        category.setCategoryDescription("hello");
+        categoryRepo.save(category);
+        PostDto responseDto = null;
+            Post post = null;
+            post.setCreationDate(new Date());
+            post.setCategory(category);
+            responseDto = postToPostDto(postRepo.save(post));
+        return responseDto;
+
+    }
+
 
     @Override
     public PostDto updatePost(PostDto postDto, Integer postId) {

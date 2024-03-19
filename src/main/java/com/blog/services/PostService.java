@@ -9,6 +9,8 @@ public interface PostService {
 
     public PostDto createPost(PostDto postDto,Integer userId,Integer postId);
 
+    public PostDto createPostWithTransaction(PostDto postDto,Integer userId,Integer postId);
+
     public PostDto updatePost(PostDto postDto,Integer postId);
 
     public PostDto getPostById(Integer postId);

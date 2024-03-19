@@ -45,6 +45,16 @@ public class PostController {
 
     }
 
+
+    //this API is explicitely to understand transactional behaviour in springboot.
+    @PostMapping("/postsWithTransaction")
+    public ResponseEntity<PostDto> createPostWithTransaction(@RequestBody PostDto postDto, @PathVariable Integer userId,
+                                              @PathVariable Integer categoryId) {
+        PostDto createPostWithTransaction = postService.createPostWithTransaction(postDto, userId, categoryId);
+        return new ResponseEntity<>(createPostWithTransaction, HttpStatus.CREATED);
+
+    }
+
     @GetMapping("/user/{userId}/posts")
     public ResponseEntity<List<PostDto>> getPostByUser(@PathVariable Integer userId) {
         List<PostDto> posts = postService.getPostsByUser(userId);
