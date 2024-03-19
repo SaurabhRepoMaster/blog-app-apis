@@ -43,7 +43,8 @@ public class SecurityConfig {
             "/auth/login","/auth/create-user","/v3/api-docs","/v2/api-docs",
             "/swagger-resources/**","/swagger-ui/**","/webjars/**","/async/**",
             "/restTemplate/**" //this api is for resttemplate
-            ,"/webFlux/**"
+            ,"/webFlux/**",
+            "/ambiguityService/**"
     };
     @Autowired
     private PasswordEncoder passwordEncoder;
