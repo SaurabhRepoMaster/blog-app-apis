@@ -2,6 +2,7 @@ package com.blog.controllers;
 
 
 import com.blog.services.AmbiguityService;
+import com.blog.services.CustomAnnotation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -24,6 +25,10 @@ public class AmbiguityController {
     //@Bean level..like we have done for ambiguityService2
     private AmbiguityService ambiguityService3;
 
+    @Autowired
+    @CustomAnnotation //here we have created our own CustomAnnotation.
+    private AmbiguityService ambiguityService4;
+
     @GetMapping("/ambiguity1")
     public String ambiguity1(){
         return ambiguityService.calculation();
@@ -37,6 +42,11 @@ public class AmbiguityController {
     @GetMapping("/ambiguity3")
     public String ambiguity3(){
         return ambiguityService3.calculation();
+    }
+
+    @GetMapping("/ambiguity4")
+    public String ambiguity4(){
+        return ambiguityService4.calculation();
     }
 
 
