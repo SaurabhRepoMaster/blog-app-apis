@@ -1,6 +1,7 @@
 package com.blog.controllers;
 
 import com.blog.entities.RestTemplateUser;
+import io.swagger.v3.oas.annotations.Hidden;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -8,6 +9,7 @@ import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
+@Hidden
 @RestController
 @RequestMapping("/webFlux")
 public class WebFluxController {
